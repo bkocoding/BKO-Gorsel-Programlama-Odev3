@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UI.ViewModels"
+             x:Class="UI.Views.NewsPage"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="Auto, *">
+        
+        <CollectionView Grid.Row="0" 
+                        ItemsSource="{Binding Categories}"
+                        SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                        SelectionMode="Single"
+                        HeightRequest="60">
+            
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5"/>
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 20" 
+                            Padding="15,8" 
+                            Margin="5,10"
+                            StrokeThickness="0">
+                        
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#E0E0E0" />
+                                        <Setter TargetName="LblTitle" Property="Label.TextColor" Value="Black" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                        <Setter TargetName="LblTitle" Property="Label.TextColor" Value="White" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Label x:Name="LblTitle" 
+                               Text="{Binding Title}" 
+                               FontAttributes="Bold" 
+                               VerticalOptions="Center" 
+                               HorizontalOptions="Center"/>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <RefreshView Grid.Row="1" 
+                     Command="{Binding LoadNewsCommand}" 
+                     IsRefreshing="{Binding IsRefreshing}"
+                     RefreshColor="{StaticResource Primary}">
+
+            <RefreshView.Triggers>
+                <DataTrigger TargetType="RefreshView" Binding="{Binding HasError}" Value="True">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+            </RefreshView.Triggers>
+            
+            <CollectionView ItemsSource="{Binding NewsList}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Gray" StrokeThickness="0.5" StrokeShape="RoundRectangle 10" Margin="10" Padding="0">
+                            <Grid RowDefinitions="200, Auto, Auto">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:NewsViewModel}}, Path=GoToDetailCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                </Grid.GestureRecognizers>
+
+                                <Image Grid.Row="0" 
+                                       Source="{Binding MainImageUrl}" 
+                                       Aspect="AspectFill"
+                                       BackgroundColor="LightGray"/>
+
+                                <Label Grid.Row="1" Text="{Binding Title}" FontAttributes="Bold" FontSize="16" Padding="10,5"/>
+
+                                <Label Grid.Row="2" Text="{Binding PubDate}" TextColor="Gray" FontSize="12" Padding="10,0,10,10"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+        
+        <VerticalStackLayout Grid.Row="1"
+                             IsVisible="{Binding HasError}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="20"
+                             Padding="30">
+
+            <Label Text="⚠️" FontSize="60" HorizontalOptions="Center"/>
+            <Label Text="Bir Sorun Oluştu" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <Label Text="{Binding ErrorMessage}" FontSize="16" TextColor="Gray" HorizontalTextAlignment="Center"/>
+            
+            <Button Text="Tekrar Dene" 
+                    Command="{Binding LoadNewsCommand}" 
+                    CornerRadius="20" 
+                    HorizontalOptions="Center"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"/>
+        </VerticalStackLayout>
+
+        <ActivityIndicator Grid.Row="1" 
+                           IsRunning="{Binding IsBusy}" 
+                           IsVisible="{Binding IsBusy}" 
+                           Color="{StaticResource Primary}" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"/>
+    </Grid>
+</ContentPage>

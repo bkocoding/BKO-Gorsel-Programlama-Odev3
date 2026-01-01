@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UI.ViewModels"
+             x:Class="UI.Views.NewsDetailPage"
+             Title="Haber Detayı"
+             BackgroundColor="{AppThemeBinding Light=White, Dark=#121212}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Paylaş" Command="{Binding ShareNewsCommand}" IconImageSource="share_icon.png"/>
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="0,0,0,20">
+            
+            <Image Source="{Binding NewsItem.MainImageUrl}" 
+                   Aspect="AspectFill" 
+                   HeightRequest="250"
+                   BackgroundColor="LightGray"/>
+
+            <VerticalStackLayout Padding="15" Spacing="10">
+                <Label Text="{Binding NewsItem.Title}" 
+                       FontSize="22" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="{Binding NewsItem.Author}" TextColor="Gray" FontSize="12"/>
+                    <Label Text="|" TextColor="Gray"/>
+                    <Label Text="{Binding NewsItem.PubDate}" TextColor="Gray" FontSize="12"/>
+                </HorizontalStackLayout>
+
+                <BoxView HeightRequest="1" Color="LightGray" Margin="0,5"/>
+
+                <Label Text="{Binding NewsItem.Description}" 
+                       TextType="Html"
+                       FontSize="16"
+                       TextColor="{AppThemeBinding Light=#333, Dark=#ddd}"/>
+
+                <Button Text="Haberin Kaynağına Git" 
+                        Command="{Binding OpenInBrowserCommand}"
+                        Margin="0,20,0,0"
+                        BackgroundColor="#D32F2F"
+                        TextColor="White"
+                        CornerRadius="20"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

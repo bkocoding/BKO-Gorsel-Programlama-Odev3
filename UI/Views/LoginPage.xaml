@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UI.ViewModels"
+             x:Class="UI.Views.LoginPage"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center" Margin="0,50,0,0">
+
+
+            <Label Text="Hoş Geldiniz"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Primary}"
+                   HorizontalOptions="Center" />
+
+            <Border Style="{StaticResource CardBorderStyle}"
+                    Padding="0">
+                <Entry Placeholder="Email"
+                       Text="{Binding Email}"
+                       Keyboard="Email"
+                       TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight},
+                       Dark={StaticResource TextPrimaryDark}}"
+                       Margin="10,0"
+                       BackgroundColor="Transparent" />
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}"
+                    Padding="0">
+                <Entry Placeholder="Şifre"
+                       Text="{Binding Password}"
+                       IsPassword="True"
+                       TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight},
+                       Dark={StaticResource TextPrimaryDark}}"
+                       Margin="10,0"
+                       BackgroundColor="Transparent" />
+            </Border>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}" />
+
+            <Button Text="Oturum Aç"
+                    Command="{Binding LoginCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="{StaticResource White}"
+                    CornerRadius="20"
+                    HeightRequest="50"
+                    FontAttributes="Bold" />
+
+            <HorizontalStackLayout HorizontalOptions="Center"
+                                   Spacing="0"
+                                   VerticalOptions="Center">
+
+                <Label Text="Hesabın yok mu?"
+                       TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight},
+                       Dark={StaticResource TextSecondaryDark}}"
+                       VerticalOptions="Center" />
+
+                <Button Text="Kaydol"
+                        Command="{Binding GoToRegisterCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource Primary}"
+                        FontAttributes="Bold"
+                        HeightRequest="40"
+                        Padding="5,0"
+                        VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

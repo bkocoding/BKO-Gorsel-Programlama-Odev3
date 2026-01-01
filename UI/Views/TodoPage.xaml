@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UI.ViewModels"
+             xmlns:converters="clr-namespace:UI.Converters"
+             xmlns:models="clr-namespace:Domain.Entities;assembly=Domain"
+             x:Class="UI.Views.TodoPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToStrikethroughConverter x:Key="BoolToStrikethroughConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ekle" Command="{Binding GoToAddPageCommand}" IconImageSource="add_icon.png" />
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <RefreshView Command="{Binding LoadTasksCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     RefreshColor="{StaticResource Primary}">
+
+            <RefreshView.Triggers>
+                <DataTrigger TargetType="RefreshView"
+                             Binding="{Binding HasError}"
+                             Value="True">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+            </RefreshView.Triggers>
+
+            <CollectionView ItemsSource="{Binding Tasks}" Margin="10">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TodoTask">
+                        <Border Stroke="Gray" StrokeShape="RoundRectangle 10" Padding="10"
+                                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+                            <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="5">
+
+                                <CheckBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                                          IsChecked="{Binding IsCompleted}"
+                                          CheckedChanged="OnTaskCheckedChanged"
+                                          VerticalOptions="Center" />
+
+                                <VerticalStackLayout Grid.Row="0" Grid.Column="1" Padding="5,0">
+                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="16"
+                                           TextDecorations="{Binding IsCompleted,
+                                           Converter={StaticResource BoolToStrikethroughConverter}}" />
+                                    <Label Text="{Binding Detail}" FontSize="12" TextColor="Gray" MaxLines="1"
+                                           LineBreakMode="TailTruncation" />
+                                </VerticalStackLayout>
+
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                                       FontSize="10" TextColor="{StaticResource Primary}" Margin="5,0" />
+
+                                <HorizontalStackLayout Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+                                                       Spacing="0" VerticalOptions="Center">
+
+                                    <ImageButton Source="edit_icon.png"
+                                                 HeightRequest="25"
+                                                 WidthRequest="25"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}},
+                                                 Path=GoToEditPageCommand}"
+                                                 CommandParameter="{Binding .}"
+                                                 Margin="5" />
+
+                                    <ImageButton Source="delete_icon.png"
+                                                 HeightRequest="25"
+                                                 WidthRequest="25"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}},
+                                                 Path=DeleteTaskCommand}"
+                                                 CommandParameter="{Binding .}"
+                                                 Margin="5" />
+                                </HorizontalStackLayout>
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <Label Text="Henüz görev yok. + butonuna basarak ekle."
+                           HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+
+        <VerticalStackLayout IsVisible="{Binding HasError}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="20"
+                             Padding="30">
+
+            <Label Text="⚠️" FontSize="60" HorizontalOptions="Center" />
+            <Label Text="Bir Sorun Oluştu" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label Text="{Binding ErrorMessage}" FontSize="16" TextColor="Gray" HorizontalTextAlignment="Center" />
+
+            <Button Text="Tekrar Dene"
+                    Command="{Binding LoadTasksCommand}"
+                    CornerRadius="20"
+                    HorizontalOptions="Center"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White" />
+        </VerticalStackLayout>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                           HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource Primary}" />
+    </Grid>
+</ContentPage>

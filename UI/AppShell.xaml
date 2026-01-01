@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Shell
+    x:Class="UI.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:UI.Views"
+    Title="BKO Odev 3">
+    
+    <ShellContent
+        Title="Giriş"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="LoginPage"
+        FlyoutItemIsVisible="False"
+        Shell.FlyoutBehavior="Disabled"
+        Shell.NavBarIsVisible="False"
+        Shell.TabBarIsVisible="False" />
+    
+    <FlyoutItem Title="Ana Sayfa" Icon="home.png">
+        <ShellContent 
+        Route="HomePage" 
+        ContentTemplate="{DataTemplate views:HomePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Kurlar" Icon="currency.png">
+        <ShellContent 
+        Route="CurrencyPage" 
+        ContentTemplate="{DataTemplate views:CurrencyPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Haberler" Icon="news.png">
+        <ShellContent 
+        Route="NewsPage" 
+        ContentTemplate="{DataTemplate views:NewsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Hava Durumu" Icon="weather.png">
+        <ShellContent 
+        Route="WeatherPage" 
+        ContentTemplate="{DataTemplate views:WeatherPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Yapılacaklar" Icon="todo.png">
+        <ShellContent 
+        Route="TodoPage" 
+        ContentTemplate="{DataTemplate views:TodoPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Ayarlar" Icon="settings.png">
+        <ShellContent 
+        Route="SettingsPage" 
+        ContentTemplate="{DataTemplate views:SettingsPage}" />
+    </FlyoutItem>
+</Shell>

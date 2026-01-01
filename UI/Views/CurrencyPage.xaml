@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain"
+             x:Class="UI.Views.CurrencyPage"
+             Title="{Binding Title}">
+
+    <Grid>
+        <RefreshView Command="{Binding LoadCurrenciesCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     RefreshColor="{StaticResource Primary}">
+
+            <RefreshView.Triggers>
+                <DataTrigger TargetType="RefreshView"
+                             Binding="{Binding HasError}"
+                             Value="True">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+            </RefreshView.Triggers>
+
+            <CollectionView ItemsSource="{Binding Currencies}"
+                            SelectionMode="None"
+                            VerticalScrollBarVisibility="Always">
+
+                <CollectionView.Header>
+                    <VerticalStackLayout Padding="0,10,0,10">
+                        <Label Text="{Binding LastUpdatedText}"
+                               TextColor="Gray"
+                               FontSize="12"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.Header>
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="0" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:Currency">
+                        
+                        <Border Stroke="LightGray"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
+                                Shadow="{x:Null}" 
+                                Padding="10"
+                                Margin="15,5" 
+                                HeightRequest="85">
+
+                            <Grid ColumnDefinitions="*, Auto, 90" RowDefinitions="*,*" ColumnSpacing="5">
+                                
+                                <Label Grid.Column="0" Grid.RowSpan="2" 
+                                       Text="{Binding Name}" 
+                                       FontSize="15" 
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource Primary}" 
+                                       VerticalTextAlignment="Center"
+                                       HorizontalTextAlignment="Start"
+                                       LineBreakMode="WordWrap"
+                                       MaxLines="2"/>
+
+                                <VerticalStackLayout Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center" Spacing="0" Margin="5,0">
+                                    <Label Text="Değişim" FontSize="10" TextColor="Gray" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding DirectionSymbol}" 
+                                           TextColor="{StaticResource Primary}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding ChangeRate}" 
+                                           TextColor="Gray"
+                                           FontSize="12"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+
+                                <Label Grid.Column="2" Grid.Row="0" 
+                                       Text="{Binding Buying}" 
+                                       FontSize="13" TextColor="#2ecc71" FontAttributes="Bold"
+                                       VerticalTextAlignment="End" HorizontalTextAlignment="End"/>
+                                
+                                <Label Grid.Column="2" Grid.Row="1" 
+                                       Text="{Binding Selling}" 
+                                       FontSize="13" TextColor="#e74c3c" FontAttributes="Bold"
+                                       VerticalTextAlignment="Start" HorizontalTextAlignment="End"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <VerticalStackLayout IsVisible="{Binding HasError}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="20"
+                             Padding="30">
+
+            <Label Text="⚠️" FontSize="60" HorizontalOptions="Center"/>
+            <Label Text="Bir Sorun Oluştu" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <Label Text="{Binding ErrorMessage}" FontSize="16" TextColor="Gray" HorizontalTextAlignment="Center"/>
+            <Button Text="Tekrar Dene" Command="{Binding LoadCurrenciesCommand}" CornerRadius="20" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Primary}" HorizontalOptions="Center" VerticalOptions="Center"/>
+    </Grid>
+</ContentPage>

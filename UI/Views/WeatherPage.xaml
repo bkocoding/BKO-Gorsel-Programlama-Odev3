@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UI.ViewModels"
+             xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain"
+             x:Class="UI.Views.WeatherPage"
+             Title="{Binding Title}">
+
+    <Grid>
+        <Grid RowDefinitions="Auto, *">
+            <Grid.Triggers>
+                <DataTrigger TargetType="Grid" Binding="{Binding HasError}" Value="True">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+            </Grid.Triggers>
+
+            <Border Grid.Row="0" Stroke="LightGray" StrokeShape="RoundRectangle 10" Padding="0" Margin="15,15,15,5"
+                    ZIndex="1">
+                <SearchBar Placeholder="Şehir Ara" Text="{Binding SearchText}"
+                           BackgroundColor="Transparent" />
+            </Border>
+
+            <CollectionView Grid.Row="1" ItemsSource="{Binding SavedCities}" Margin="15,5,15,0" ZIndex="0">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:WeatherCity">
+
+                        <Border Stroke="LightGray"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
+                                Shadow="{x:Null}"
+                                Padding="15"
+                                Margin="0,5"
+                                HeightRequest="250">
+
+                            <Grid RowDefinitions="Auto, *">
+
+                                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Name}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Primary}"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Start" />
+
+                                    <Button Grid.Column="1"
+                                            Text="X"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WeatherViewModel}}, Path=RemoveCityCommand}"
+                                            CommandParameter="{Binding .}"
+                                            HeightRequest="30"
+                                            WidthRequest="30"
+                                            Padding="0"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Center"
+                                            BackgroundColor="#e74c3c"
+                                            TextColor="White"
+                                            CornerRadius="15" />
+                                </Grid>
+
+                                <Grid Grid.Row="1"
+                                      Margin="0,10,0,0"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="Center">
+
+                                    <ActivityIndicator IsRunning="True"
+                                                       Color="{StaticResource Primary}"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       ZIndex="0" />
+
+                                    <WebView Source="{Binding WidgetUrl}"
+                                             WidthRequest="320"
+                                             HeightRequest="180"
+                                             BackgroundColor="Transparent"
+                                             Navigated="OnWidgetLoaded"
+                                             ZIndex="1" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                        <Label Text="☁️" FontSize="50" HorizontalOptions="Center" />
+                        <Label Text="Henüz şehir eklenmedi." TextColor="Gray" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+            <CollectionView Grid.Row="1" ItemsSource="{Binding SearchResults}"
+                            IsVisible="{Binding IsSearchResultsVisible}" HeightRequest="200" VerticalOptions="Start"
+                            Margin="20,0,20,0" ZIndex="99"
+                            BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border StrokeThickness="0" Padding="15,10" BackgroundColor="Transparent">
+                            <Label Text="{Binding .}" FontSize="16"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}" VerticalOptions="Center" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WeatherViewModel}}, Path=AddCityCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+
+        <VerticalStackLayout IsVisible="{Binding HasError}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="20"
+                             Padding="30">
+
+            <Label Text="⚠️" FontSize="60" HorizontalOptions="Center" />
+
+            <Label Text="Bir Sorun Oluştu"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                   HorizontalOptions="Center" />
+
+            <Label Text="{Binding ErrorMessage}"
+                   FontSize="16"
+                   TextColor="Gray"
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="Center" />
+
+            <Button Text="Tekrar Dene"
+                    Command="{Binding RetryCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    CornerRadius="20"
+                    Padding="30,10"
+                    HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Primary}"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+
+    </Grid>
+</ContentPage>

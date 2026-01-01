@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UI.Views.HomePage"
+             Title="Ana Sayfa">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20" VerticalOptions="Center">
+
+            <Border Style="{StaticResource CardBorderStyle}"
+                    StrokeThickness="0" 
+                    StrokeShape="RoundRectangle 20" 
+                    Padding="30">
+                
+                <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                    
+                    <Label Text="ÖDEV - 3" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="{StaticResource Primary}" 
+                           HorizontalOptions="Center"/>
+
+                    <Border Stroke="{StaticResource Primary}"
+                            StrokeThickness="3"
+                            StrokeShape="RoundRectangle 75"
+                            HeightRequest="150"
+                            WidthRequest="150"
+                            HorizontalOptions="Center">
+                        <Image Source="{Binding ProfileImage}" 
+                               Aspect="AspectFill"
+                               HeightRequest="150"
+                               WidthRequest="150"/>
+                    </Border>
+
+                    <Label Text="{Binding StudentName}" 
+                           FontSize="22" 
+                           FontAttributes="Bold" 
+                           TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}"
+                           HorizontalOptions="Center"/>
+
+                    <Label Text="{Binding StudentNumber}" 
+                           FontSize="18" 
+                           TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
+                           HorizontalOptions="Center"/>
+                    
+                    <BoxView HeightRequest="1" 
+                             Color="{StaticResource Gray300}" 
+                             WidthRequest="200"/>
+
+                    <Label Text="{Binding Department}" 
+                           FontSize="16" 
+                           TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}"
+                           HorizontalTextAlignment="Center"
+                           HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Border>
+            
+            <Button Text="Oturumu Kapat"
+                    Command="{Binding LogoutCommand}"
+                    BackgroundColor="#e74c3c"
+                    TextColor="White"
+                    CornerRadius="10"
+                    Margin="0,20,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

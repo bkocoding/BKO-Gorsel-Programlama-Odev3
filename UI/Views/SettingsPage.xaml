@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UI.Views.SettingsPage"
+             Title="{Binding Title}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="20">
+                <Grid ColumnDefinitions="*, Auto">
+                    
+                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+                        <Label Text="Karanlık Mod" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}"/>
+                        
+                        <Label Text="Temayı koyu veya açık olarak değiştirin." 
+                               FontSize="14" 
+                               TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"/>
+                    </VerticalStackLayout>
+
+                    <Switch Grid.Column="1" 
+                            IsToggled="{Binding IsDarkMode}" 
+                            OnColor="{StaticResource Primary}" 
+                            ThumbColor="{StaticResource White}" />
+                    
+                </Grid>
+            </Border>
+            
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
