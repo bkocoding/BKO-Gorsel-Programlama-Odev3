@@ -1,9 +1,9 @@
 {
-  "apiKey": "AIzaSyCwWbRB4cpGDRx7FNTma33m2uDM4vIJVIo",
-  "authDomain": "bsm322-odev3-da08d.firebaseapp.com",
-  "databaseURL": "https://bsm322-odev3-da08d-default-rtdb.europe-west1.firebasedatabase.app",
-  "projectId": "bsm322-odev3-da08d",
-  "storageBucket": "bsm322-odev3-da08d.firebasestorage.app",
-  "messagingSenderId": "325071321328",
-  "appId": "1:325071321328:web:e6b01cca85eb7ffd916a35"
+  "apiKey": "XXXX",
+  "authDomain": "XXXX.firebaseapp.com",
+  "databaseURL": "XXXX.app",
+  "projectId": "XXXX",
+  "storageBucket": "XXXX",
+  "messagingSenderId": "XXXXXX",
+  "appId": "XXXX"
 }
